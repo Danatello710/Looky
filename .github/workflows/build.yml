@@ -3,15 +3,20 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # Используем конкретную версию Ubuntu
+
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get Date
+        id: get-date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
       - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
+        # Используем альтернативный экшен, он стабильнее
+        uses: akshayaurora/buildozer-action@master
         with:
-          # Используем стабильную версию экшена, чтобы избежать ошибки chown
-          buildozer_version: stable
+          buildozer_version: master
           command: buildozer android debug
           repository_root: .
 
