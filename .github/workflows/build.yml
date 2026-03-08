@@ -1,0 +1,22 @@
+name: Build Looky APK
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        with:
+          # Используем стабильную версию экшена, чтобы избежать ошибки chown
+          buildozer_version: stable
+          command: buildozer android debug
+          repository_root: .
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Looky-Package
+          path: bin/*.apk
