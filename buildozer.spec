@@ -20,7 +20,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.1,kivymd==1.2.0,pillow,ffpyplayer
+requirements = python3,kivy==2.3.1,kivymd==1.2.0,pillow,ffpyplayer,ffpyplayer_android
 
 # (str) Custom source folders for requirements
 # садятся на хвост, если есть папка videos
