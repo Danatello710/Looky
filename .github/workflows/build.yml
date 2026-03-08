@@ -10,7 +10,8 @@ jobs:
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         with:
-          buildozer_version: master
+          # Используем стабильную версию экшена, чтобы избежать ошибки chown
+          buildozer_version: stable
           command: buildozer android debug
           repository_root: .
 
