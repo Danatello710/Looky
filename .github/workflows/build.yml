@@ -20,16 +20,39 @@ jobs:
           sudo apt install -y git zip unzip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
           pip3 install --user --upgrade Cython==0.29.33 virtualenv buildozer
 
+ name: Build Looky APK
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev libsqlite3-dev lld
+          # Устанавливаем конкретные версии, проверенные временем
+          pip3 install --user --upgrade "Cython<3.0" virtualenv buildozer
+
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # Магия: автоматически принимаем все лицензии Android SDK
+          # Авто-подтверждение лицензий и запуск
           yes | buildozer android debug
         env:
-          # Это поможет Buildozer не тупить в виртуальной среде
           CI: true
 
       - name: Upload APK
+        if: always() # Загружаем лог, даже если сборка упала
         uses: actions/upload-artifact@v4
         with:
           name: Looky-Package
