@@ -29,20 +29,18 @@ jobs:
 
       - name: Install Buildozer and Cython
         run: |
-          # Устанавливаем Cython версии 0.29.33 — это золотой стандарт для Kivy
+          # Используем проверенную версию Cython для Kivy
           pip3 install --user --upgrade "Cython<3.0" virtualenv buildozer
-          # Добавляем путь к buildozer в систему
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Build with Buildozer
         run: |
-          # Соглашаемся со всеми лицензиями Android SDK автоматически
-          yes | buildozer android debug
+          # Убираем 'yes |', так как мы включим авто-лицензии в самом .spec файле
+          buildozer -v android debug
         env:
           CI: true
 
       - name: Upload APK
-        # Этот шаг сработает, даже если сборка упала (чтобы ты мог скачать логи)
         if: always()
         uses: actions/upload-artifact@v4
         with:
